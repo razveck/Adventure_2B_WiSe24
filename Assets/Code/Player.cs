@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private InputAction lookAction;
         
     private float cameraXRotation;
+    private Vector3 velocity;
     
     #endregion
     
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
     
     public PlayerInput playerInputActions;
     public float speed = 10f;
+    public float gravity = -9.8f;
     public float mouseSensitivity = 1f;
     public CharacterController controller;
     public Transform camera;
@@ -42,8 +44,14 @@ public class Player : MonoBehaviour
         Vector3 moveAmount = transform.right * moveInput.x + transform.forward * moveInput.y;
         moveAmount *= speed * Time.deltaTime;
         
+        velocity.x = moveAmount.x;
+        velocity.y += gravity * Time.deltaTime * Time.deltaTime;
+        velocity.z = moveAmount.z;
         
-        controller.Move(moveAmount);
+        
+        if(controller.Move(velocity) == CollisionFlags.Below){
+            velocity.y = 0f;
+        }
         
         
         Vector2 lookInput = lookAction.ReadValue<Vector2>();
