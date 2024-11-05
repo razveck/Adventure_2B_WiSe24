@@ -9,5 +9,6 @@ using UnityEngine;
 //	- nächste DialogLine
 public class DialogLine : MonoBehaviour {
 	public string text;
+	public Sprite portrait;
 	public List<DialogOption> options;
 }

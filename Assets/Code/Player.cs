@@ -62,7 +62,7 @@ public class Player : MonoBehaviour {
 		}
 
 
-		Vector2 lookInput = lookAction.ReadValue<Vector2>();
+		Vector2 lookInput = lookAction.ReadValue<Vector2>() * Time.timeScale;
 
 		//camera rotation
 		cameraXRotation -= lookInput.y * mouseSensitivity;

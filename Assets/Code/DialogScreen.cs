@@ -11,6 +11,7 @@ public class DialogScreen : MonoBehaviour {
 	private PlayerInput playerInput;
 
 	public TMP_Text dialogText;
+	public Image portraitImage;
 
 	public List<Button> buttons;
 
@@ -39,6 +40,8 @@ public class DialogScreen : MonoBehaviour {
 			return; //abbrechen
 		}
 
+		currentLine.options[index].onSelected.Invoke();
+
 		if(currentLine.options[index].nextLine == null){
 			EndDialog();
 			return; //abbrechen
@@ -51,6 +54,8 @@ public class DialogScreen : MonoBehaviour {
 	public void StartDialog(DialogLine line){
 		currentLine = line;
 		dialogText.text = line.text;
+		if(line.portrait != null)
+			portraitImage.sprite = line.portrait;
 
 		for(int i = 0; i < buttons.Count; i++){
 			if(i < line.options.Count){ //es gibt eine Option für diesen Button
@@ -67,11 +72,31 @@ public class DialogScreen : MonoBehaviour {
 		}
 
 		gameObject.SetActive(true);
-		playerInput.enabled = false;
+		playerInput.currentActionMap.Disable();
+
+		//Führt die Funktion als Coroutine aus statt "normale" Funktion
+		StartCoroutine(TypewriterCoroutine());
+
 	}
 
 	public void EndDialog(){
 		gameObject.SetActive(false);
-		playerInput.enabled = true;
+		playerInput.currentActionMap.Enable();
+	}
+
+	//muss nicht Coroutine heissen (aber ich mach das gerne :D)
+	private IEnumerator TypewriterCoroutine(){
+
+		int length = dialogText.text.Length;
+		//string finalText = dialogText.text;
+		//dialogText.text = "";
+
+		WaitForSeconds delay = new WaitForSeconds(0.1f);
+
+		for(int i = 0; i < length; i++) {
+			dialogText.maxVisibleCharacters = i + 1;
+			//dialogText.text = finalText.Substring(0, i + 1);
+			yield return delay;
+		}
 	}
 }
