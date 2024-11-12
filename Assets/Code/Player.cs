@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour {
+
 	#region private variables
 
 	private InputAction moveAction;
@@ -43,7 +44,6 @@ public class Player : MonoBehaviour {
 		if(interactAction.WasPressedThisFrame() && currentInteractable != null){
 			currentInteractable.OnInteract();
 		}
-
 
 
 		//y = WS, x = AD
