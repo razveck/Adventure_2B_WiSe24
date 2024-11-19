@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -76,6 +77,8 @@ public class DialogScreen : MonoBehaviour {
 
 		//Führt die Funktion als Coroutine aus statt "normale" Funktion
 		StartCoroutine(TypewriterCoroutine());
+
+		EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
 
 	}
 
