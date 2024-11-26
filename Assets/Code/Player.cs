@@ -27,6 +27,10 @@ public class Player : MonoBehaviour {
 	public float mouseSensitivity = 1f;
 	public CharacterController controller;
 	public Transform camera;
+	public Animator animator;
+	public FootstepsPlayer footsteps;
+
+	public bool onLadder;
 
 	#endregion
 
@@ -75,7 +79,7 @@ public class Player : MonoBehaviour {
 
 
 
-
+		animator.SetFloat("speed", moveInput.y);
 
 
 
@@ -104,6 +108,9 @@ public class Player : MonoBehaviour {
 		if(interactable != null){
 			currentInteractable = interactable;
 		}
+
+		if(other.CompareTag("Concrete") || other.CompareTag("Forest") || other.CompareTag("Leaves"))
+			footsteps.ChangeUntergrund(other.tag);
 	}
 
 	void OnTriggerExit(Collider other){
@@ -111,6 +118,9 @@ public class Player : MonoBehaviour {
 		if(interactable == currentInteractable){
 			currentInteractable = null;
 		}
+
+		if(other.CompareTag("Concrete") || other.CompareTag("Forest"))
+			footsteps.ChangeUntergrund("Leaves");
 	}
 
 }

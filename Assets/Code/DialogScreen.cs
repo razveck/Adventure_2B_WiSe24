@@ -9,8 +9,8 @@ using UnityEngine.UI;
 public class DialogScreen : MonoBehaviour {
 
 	private DialogLine currentLine;
-	private PlayerInput playerInput;
 
+	public PlayerInput playerInput;
 	public TMP_Text dialogText;
 	public Image portraitImage;
 
@@ -31,8 +31,6 @@ public class DialogScreen : MonoBehaviour {
 			int index = i;
 			buttons[i].onClick.AddListener(() => OnButtonClick(index));
 		}
-
-		playerInput = FindAnyObjectByType<PlayerInput>();
 	}
 
 	void OnButtonClick(int index){
@@ -73,10 +71,13 @@ public class DialogScreen : MonoBehaviour {
 		}
 
 		gameObject.SetActive(true);
-		playerInput.currentActionMap.Disable();
+		playerInput.DeactivateInput();
 
 		//Führt die Funktion als Coroutine aus statt "normale" Funktion
+		StopAllCoroutines();
 		StartCoroutine(TypewriterCoroutine());
+		//Wenn wir mehrere Coroutines haben, können wir auch nur eine stoppen, mit:
+		//StopCoroutine(HIER DIE COROUTINE VARIABEL);
 
 		EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
 
@@ -84,7 +85,8 @@ public class DialogScreen : MonoBehaviour {
 
 	public void EndDialog(){
 		gameObject.SetActive(false);
-		playerInput.currentActionMap.Enable();
+		playerInput.ActivateInput();
+
 	}
 
 	//muss nicht Coroutine heissen (aber ich mach das gerne :D)
@@ -101,5 +103,7 @@ public class DialogScreen : MonoBehaviour {
 			//dialogText.text = finalText.Substring(0, i + 1);
 			yield return delay;
 		}
+
+
 	}
 }

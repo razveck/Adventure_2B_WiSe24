@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using FMODUnity;
@@ -14,12 +15,19 @@ public class PauseMenu : MonoBehaviour {
 	public GameObject pauseMenuObject;
 
 	public GameObject resumeButton;
+	public DialogScreen dialogScreen;
+
+	IDisposable onAnyEvent;
 
 	private void Awake() {
-		InputSystem.onAnyButtonPress.Call(OnAnyButtonPress);
+		onAnyEvent = InputSystem.onAnyButtonPress.Call(OnAnyButtonPress);
 	}
-	private void OnAnyButtonPress(InputControl control) {
 
+	private void OnDestroy() {
+		onAnyEvent.Dispose();
+	}
+
+	private void OnAnyButtonPress(InputControl control) {
 		if(control.device.name.Contains("Mouse"))
 			return;
 
@@ -50,10 +58,11 @@ public class PauseMenu : MonoBehaviour {
 
 		if(paused) {
 			Time.timeScale = 1f;
-			playerInputActions.currentActionMap.Enable();
+			if(!dialogScreen.gameObject.activeSelf)
+				playerInputActions.ActivateInput();
 		} else {
 			Time.timeScale = 0f;
-			playerInputActions.currentActionMap.Disable();
+			playerInputActions.DeactivateInput();
 			EventSystem.current.SetSelectedGameObject(resumeButton);
 		}
 	}
