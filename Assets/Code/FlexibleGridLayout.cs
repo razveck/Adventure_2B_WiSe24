@@ -1,6 +1,4 @@
-﻿//Author: João Azuaga
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-//Tweaked the code to add more functionality
-//Added a minimum to some variables so they don't go under 0 or 1
-//Added all child alignments
 //Obtained here: https://www.youtube.com/watch?v=CGsEJToeXmA&lc=UgyWScoCapX7-dR6VS54AaABAg (highlighted comment)
 public class FlexibleGridLayout : LayoutGroup {
 
@@ -70,7 +65,7 @@ public class FlexibleGridLayout : LayoutGroup {
 
 
 
-	public bool NudgeLastItemsOver;
+	public bool centerLastItems;
 
 	public override void CalculateLayoutInputVertical() { }
 
@@ -213,7 +208,7 @@ public class FlexibleGridLayout : LayoutGroup {
 
 					columnCount = i % columns;
 
-					if(NudgeLastItemsOver && rowCount == (rectChildren.Count / columns)) { xLastItemOffset = (cellSize.x + padding.left) / 2; }
+					if(centerLastItems && rowCount == (rectChildren.Count / columns)) { xLastItemOffset = (cellSize.x + padding.left) / 2; }
 
 					break;
 
@@ -225,7 +220,7 @@ public class FlexibleGridLayout : LayoutGroup {
 
 					columnCount = i % rows;
 
-					if(NudgeLastItemsOver && rowCount == (rectChildren.Count / rows)) { xLastItemOffset = (cellSize.x + padding.left) / 2; }
+					if(centerLastItems && rowCount == (rectChildren.Count / rows)) { xLastItemOffset = (cellSize.x + padding.left) / 2; }
 
 					break;
 
