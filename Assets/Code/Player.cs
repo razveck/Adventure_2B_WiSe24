@@ -23,14 +23,18 @@ public class Player : MonoBehaviour {
 
 	public PlayerInput playerInputActions;
 	public float speed = 10f;
+	public float turnSpeed = 10f;
 	public float gravity = -9.8f;
 	public float mouseSensitivity = 1f;
+	public bool invertMouseX;
+	public bool invertMouseY;
 	public CharacterController controller;
-	public Transform camera;
+	public Transform cameraPivotX;
+	public Transform cameraPivotY;
 	public Animator animator;
 	public FootstepsPlayer footsteps;
 
-	public bool onLadder;
+
 
 	#endregion
 
@@ -45,7 +49,7 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		//&& = UND
-		if(interactAction.WasPressedThisFrame() && currentInteractable != null){
+		if(interactAction.WasPressedThisFrame() && currentInteractable != null) {
 			currentInteractable.OnInteract();
 		}
 
@@ -68,16 +72,32 @@ public class Player : MonoBehaviour {
 
 		Vector2 lookInput = lookAction.ReadValue<Vector2>() * Time.timeScale;
 
+		if(invertMouseX)
+			lookInput.x *= -1;
+		if(invertMouseY)
+			lookInput.y *= -1;
+
+		lookInput *= mouseSensitivity;
+		
 		//camera rotation
-		cameraXRotation -= lookInput.y * mouseSensitivity;
+		cameraXRotation -= lookInput.y;
 		cameraXRotation = Mathf.Clamp(cameraXRotation, 0, 80);
-		camera.eulerAngles = new Vector3(cameraXRotation, camera.eulerAngles.y, camera.eulerAngles.z);
+		cameraPivotX.eulerAngles = new Vector3(cameraXRotation, cameraPivotX.eulerAngles.y, cameraPivotX.eulerAngles.z);
 
-		//player rotation
-		transform.Rotate(0f, lookInput.x, 0f);
+		cameraPivotY.Rotate(0f, lookInput.x, 0f, Space.World);
 
+		if(moveInput != Vector2.zero) {
+			//camera ist ein Child, wird also mitgedreht. Vorher die Richtung abspeichern
+			Vector3 cameraForward = cameraPivotY.forward;
 
+			transform.forward = Vector3.Lerp(transform.forward, cameraPivotY.forward, turnSpeed * Time.deltaTime);
 
+			//Richtung nochmal zurücksetzen
+			cameraPivotY.forward = cameraForward;
+		}
+
+		//camera ist kein Child vom Player
+		//cameraPivotY.position = transform.position;
 
 		animator.SetFloat("speed", moveInput.y);
 
@@ -99,13 +119,13 @@ public class Player : MonoBehaviour {
 
 	}
 
-	void OnTriggerEnter(Collider other){
+	void OnTriggerEnter(Collider other) {
 		//variabel mit Typ "Interactable"
 		//beim "other" wird nach einem Interactable component gesucht und das Ergebnis gespeichert
 		Interactable interactable = other.GetComponent<Interactable>();
 
 		//wenn "other" kein Interactable component hat, wird "null" rausgegeben, und es muss geprüft werden
-		if(interactable != null){
+		if(interactable != null) {
 			currentInteractable = interactable;
 		}
 
@@ -113,9 +133,9 @@ public class Player : MonoBehaviour {
 			footsteps.ChangeUntergrund(other.tag);
 	}
 
-	void OnTriggerExit(Collider other){
+	void OnTriggerExit(Collider other) {
 		Interactable interactable = other.GetComponent<Interactable>();
-		if(interactable == currentInteractable){
+		if(interactable == currentInteractable) {
 			currentInteractable = null;
 		}
 
