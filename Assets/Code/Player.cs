@@ -34,8 +34,6 @@ public class Player : MonoBehaviour {
 	public Animator animator;
 	public FootstepsPlayer footsteps;
 
-
-
 	#endregion
 
 
@@ -52,7 +50,6 @@ public class Player : MonoBehaviour {
 		if(interactAction.WasPressedThisFrame() && currentInteractable != null) {
 			currentInteractable.OnInteract();
 		}
-
 
 		//y = WS, x = AD
 		Vector2 moveInput = moveAction.ReadValue<Vector2>();
@@ -78,7 +75,7 @@ public class Player : MonoBehaviour {
 			lookInput.y *= -1;
 
 		lookInput *= mouseSensitivity;
-		
+
 		//camera rotation
 		cameraXRotation -= lookInput.y;
 		cameraXRotation = Mathf.Clamp(cameraXRotation, 0, 80);
