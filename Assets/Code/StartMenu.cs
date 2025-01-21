@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FMODUnity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StartMenu : MonoBehaviour {
 
@@ -16,6 +17,8 @@ public class StartMenu : MonoBehaviour {
 		}
 
 		MusicSystem.Instance.music.setParameterByNameWithLabel("Scene", "Menu");
+
+		master.onValueChanged.AddListener(MasterSlider);
 	}
 
 	public void StartGame() {
@@ -32,6 +35,16 @@ public class StartMenu : MonoBehaviour {
 			volume = 1;
 
 		RuntimeManager.GetBus("bus:/").setVolume(volume);
+
+	}
+
+	public Slider master;
+
+	public void MasterSlider(float volume){
+
+
+		//VCA
+		RuntimeManager.GetVCA("vca:/Master").setVolume(volume);
 	}
 
 }

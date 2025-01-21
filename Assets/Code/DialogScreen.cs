@@ -73,8 +73,8 @@ public class DialogScreen : MonoBehaviour {
 		gameObject.SetActive(true);
 		playerInput.DeactivateInput();
 
-		//Führt die Funktion als Coroutine aus statt "normale" Funktion
 		StopAllCoroutines();
+		//Führt die Funktion als Coroutine aus statt "normale" Funktion
 		StartCoroutine(TypewriterCoroutine());
 		//Wenn wir mehrere Coroutines haben, können wir auch nur eine stoppen, mit:
 		//StopCoroutine(HIER DIE COROUTINE VARIABEL);
