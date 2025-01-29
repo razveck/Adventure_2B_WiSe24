@@ -17,8 +17,6 @@ public class StartMenu : MonoBehaviour {
 		}
 
 		MusicSystem.Instance.music.setParameterByNameWithLabel("Scene", "Menu");
-
-		master.onValueChanged.AddListener(MasterSlider);
 	}
 
 	public void StartGame() {
@@ -38,13 +36,8 @@ public class StartMenu : MonoBehaviour {
 
 	}
 
-	public Slider master;
+	
 
-	public void MasterSlider(float volume){
-
-
-		//VCA
-		RuntimeManager.GetVCA("vca:/Master").setVolume(volume);
-	}
+	
 
 }

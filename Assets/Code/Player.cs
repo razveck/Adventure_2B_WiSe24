@@ -25,9 +25,8 @@ public class Player : MonoBehaviour {
 	public float speed = 10f;
 	public float turnSpeed = 10f;
 	public float gravity = -9.8f;
-	public float mouseSensitivity = 1f;
-	public bool invertMouseX;
-	public bool invertMouseY;
+	
+	
 	public CharacterController controller;
 	public Transform cameraPivotX;
 	public Transform cameraPivotY;
@@ -69,13 +68,13 @@ public class Player : MonoBehaviour {
 
 		Vector2 lookInput = lookAction.ReadValue<Vector2>() * Time.timeScale;
 
-		if(invertMouseX)
+		if(OptionsMenu.myOptions.invertMouseX)
 			lookInput.x *= -1;
-		if(invertMouseY)
+		if(OptionsMenu.myOptions.invertMouseY)
 			lookInput.y *= -1;
 
-		lookInput *= mouseSensitivity;
-
+		lookInput *= OptionsMenu.myOptions.mouseSensitivity;
+		
 		//camera rotation
 		cameraXRotation -= lookInput.y;
 		cameraXRotation = Mathf.Clamp(cameraXRotation, 0, 80);
@@ -113,6 +112,21 @@ public class Player : MonoBehaviour {
 		//camera.position = transform.position + new Vector3(camera.position.x, y, z);
 
 		//camera.Rotate(lookInput.y, 0f, 0f, Space.World);
+
+
+
+		//Collider[] result = Physics.OverlapSphere(transform.position, 0.5f);
+		//bool hasCollider = false;
+		//foreach(var collider in result) {
+		//	if(collider.CompareTag("Concrete") || collider.CompareTag("Forest")){
+		//		footsteps.ChangeUntergrund(collider.tag);
+		//		hasCollider = true;
+		//	}
+		//}
+
+		//if(!hasCollider){
+		//	footsteps.ChangeUntergrund("Leaves");
+		//}
 
 	}
 
